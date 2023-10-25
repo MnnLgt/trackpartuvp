@@ -88,7 +88,10 @@ def read_data_files(directory, deployment, depth_depl):
         df_seq['averaged_depth'] = df_seq['depth'].rolling(
             3, center = True).mean()
         df_seq = df_seq.drop(['depth'], axis=1)
-        df_all = df_all.append(df_seq, ignore_index = True)
+        # Method append disappeared with pandas 2.0
+        #df_all = df_all.append(df_seq, ignore_index = True)
+        # Instead use the method concat
+        df_all = pd.concat([df_all, df_seq])
     
     # Calculate difference with mean deployment depth
     mean_depth = df_all['averaged_depth'].mean()

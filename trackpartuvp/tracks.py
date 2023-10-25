@@ -240,8 +240,11 @@ def get_tracks(directory, deployment, depth, path_inclino = '', axis = None,
                 bool_file = True
             else:
                 df_summary = pd.read_csv(filename, sep = "\t")
-                df_global = df_global.append(df_summary, ignore_index = True)
-    
+                # Method append disappeared with pandas 2.0
+                #df_global = df_global.append(df_summary, ignore_index = True)
+                # Instead use the method concat
+                df_global = pd.concat([df_global, df_summary])
+                
     # Save global file
     filename = "".join(('tracks_summary_', deployment, '_', depth, '.tsv'))
     filename = os.path.join(dir_tracks, filename)

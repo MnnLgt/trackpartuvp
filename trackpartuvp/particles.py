@@ -106,8 +106,11 @@ def get_particles(directory, A, B, threshold):
         print('Saving dataframe particles')
         df_particles.to_csv(path_csv1, index = False)
         
-        df_size_spectra = df_size_spectra.append(
-            df_areas, ignore_index = True, sort = True)
+        # Method append disappeared with pandas 2.0
+        #df_size_spectra = df_size_spectra.append(
+        #    df_areas, ignore_index = True, sort = True)
+        # Instead use the method concat
+        df_size_spectra = pd.concat([df_size_spectra, df_areas])
         
         print('--------------------')
         
