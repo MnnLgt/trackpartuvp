@@ -59,12 +59,7 @@ A ```results/``` folder is created. It is organized as follows:
 - ```plot_ecotaxa_from_df.py```
 - ```zip_folders.py```
 
-## Examples
-
-
-
-
-
+## Running the code
 
 
 

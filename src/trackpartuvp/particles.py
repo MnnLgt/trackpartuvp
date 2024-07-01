@@ -95,6 +95,7 @@ def get_particles(source_directory, dest_directory, A, B, threshold,
         # Prepare name of result file
         filename = "".join(['particles_', subdir, '.csv'])
         path_csv1 = os.path.join(dir_results, 'particles_data', filename)
+        path_csv1 = path_csv1.replace('.tar', '')
 
         # Check if the particles dataframe already exists
         if (Path(path_csv1).is_file()):  # and Path(path_csv_psd).is_file()
@@ -146,7 +147,6 @@ def get_particles(source_directory, dest_directory, A, B, threshold,
             #    subdir, img_names, platform_speed_path)
 
             print('Saving dataframe particles')
-            path_csv1 = path_csv1.replace('.tar', '')
             df_particles.to_csv(path_csv1, index=False)
 
             # Method append disappeared with pandas 2.0

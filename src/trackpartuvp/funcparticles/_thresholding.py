@@ -205,14 +205,6 @@ class Thresholding():
                     if not raw_area >= 2:
                         continue
 
-
-
-
-
-
-
-
-
                     # Append area for size spectrum
                     # list_area.append(ceil(raw_area))
 
@@ -241,10 +233,17 @@ class Thresholding():
                     elong = None
                     circ = None
                     if raw_area >= 5:
-                        elong = props[i][
-                            'major_axis_length']/props[i]['minor_axis_length']
-                        circ = (4*np.pi*props[i][
-                            'area'])/(props[i]['perimeter']**2)  # it has to
+                        try:
+                            elong = props[i][
+                                'major_axis_length']/props[i]['minor_axis_length']
+                        except:
+                            print(" ")
+                        try:
+                            circ = (4*np.pi*props[i][
+                                'area'])/(props[i]['perimeter']**2)
+                        except:
+                            print(" ")
+                        # it has to
                         # be a value between 0 and 1; 0 = elongated object and
                         # 1 = perfect circle but I have values higher than 1
                         # and I have an inversed relationship

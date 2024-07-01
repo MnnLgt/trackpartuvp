@@ -19,9 +19,10 @@ from trackpartuvp.utils._utils import parse_datetime, create_dir
 from trackpartuvp.functracks._inclino import add_inclination
 from trackpartuvp.functracks._tracking import Tracking
 from trackpartuvp.functracks._get_tracks import GetTracks
-from trackpartuvp.functracks._plots import Plots
-from trackpartuvp.functracks._plot_ecotaxa import plot_ecotaxa
-from trackpartuvp.functracks._plots_global import PlotsGlobal
+# from trackpartuvp.functracks._plots import Plots
+# from trackpartuvp.functracks._plot_ecotaxa import plot_ecotaxa
+from trackpartuvp.functracks._plot_ecotaxa_from_df import plot_ecotaxa_from_dataframe
+# from trackpartuvp.functracks._plots_global import PlotsGlobal
 
 
 def get_tracks(source_directory, dest_directory, deployment, depth,
@@ -106,6 +107,7 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
 
     # Create a sub directory for each sequence
     for subdir in subdirs:
+        subdir = subdir.replace('.tar', '')
         create_dir(subdir)
 
     # For plots
@@ -127,6 +129,8 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
     # 2.  Tracking particles and saving tracks for each sequence
 
     for subdir in subdirs:
+
+        subdir = subdir.replace('.tar', '')
 
         # Dataframe containing particles
         print('Sequence: ', subdir)
@@ -197,11 +201,12 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
         # Plots(list_tracks, df_particles, res_subdir).run()
 
         # Saving plots_ecotaxa
-        os.chdir(dir_ecotaxa)
-        dics = plot_ecotaxa(
-            list_tracks=list_tracks, subdir=subdir, deployment=deployment,
-            depth=depth, save_plots=False)
-        list_ecotaxa.extend(dics)
+        # os.chdir(dir_ecotaxa)
+
+        # dics = plot_ecotaxa(
+        #     list_tracks=list_tracks, subdir=subdir, deployment=deployment,
+        #     depth=depth, save_plots=False)
+        # list_ecotaxa.extend(dics)
 
         # Save the 1st vignette in img_to_show
 
@@ -297,6 +302,9 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
         ('tracks_summary_', deployment, '_', depth, '.tsv'))
     filename_global = os.path.join(dir_tracks, filename_global)
     df_global.to_csv(filename_global, sep="\t", index=False)
+
+    # Save Ecotaxa files and plots
+    plot_ecotaxa_from_dataframe(filename_all, subdir, deployment, depth)
 
     # plot the distribution of euclidean distance (AA)
     # sns.histplot(df_all['euclidean_distance'], kde=True, color="blue")
