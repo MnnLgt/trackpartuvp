@@ -161,7 +161,9 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
 
         # Get correction for angle for this sequence
         df_particles['roll'] = [None]*len(df_particles)
-        if inclino_params:
+        if inclino_params is None:
+            print('')
+        else:
             df_particles = add_inclination(inclino_params, df_particles)
 
         res_subdir = os.path.join(dir_tracks, subdir)
@@ -259,7 +261,9 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
     while ct_subdir < len(subdirs):
 
         subdir = subdirs[ct_subdir]
+        subdir = subdir.replace('.tar', '')
         res_subdir = os.path.join(dir_tracks, subdir)
+        res_subdir = res_subdir.replace('.tar', '')
 
         # For tracks_summary files
         filename_summary = os.path.join(
@@ -304,7 +308,7 @@ def get_tracks(source_directory, dest_directory, deployment, depth,
     df_global.to_csv(filename_global, sep="\t", index=False)
 
     # Save Ecotaxa files and plots
-    plot_ecotaxa_from_dataframe(filename_all, subdir, deployment, depth)
+    # plot_ecotaxa_from_dataframe(filename_all, subdir, deployment, depth)
 
     # plot the distribution of euclidean distance (AA)
     # sns.histplot(df_all['euclidean_distance'], kde=True, color="blue")

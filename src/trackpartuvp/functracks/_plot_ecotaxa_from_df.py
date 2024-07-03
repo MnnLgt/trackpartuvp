@@ -78,8 +78,10 @@ def plot_ecotaxa_from_dataframe(df, subdir, deployment, depth,
 
     list_dic_tsv = []
 
+    track_ids = df['track_id'].unique().tolist()
+
     # Iterate over each unique track_id
-    for track_id in df['track_id'].unique():
+    for track_id in track_ids:
 
         # Get track data from dataframe
         track_data = df[df['track_id'] == track_id]
@@ -217,13 +219,6 @@ def plot_ecotaxa_from_dataframe(df, subdir, deployment, depth,
 # track_above.head(10)
 # track_above.shape
 # result_list = plot_ecotaxa_from_dataframe(track_above, '', '', '')
-
-
-
-
-
-
-
 
 
 def plot_ecotaxa_95_percentile(df_all_path, saving_path):

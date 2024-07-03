@@ -13,6 +13,8 @@ Estimate vertical oscillations of the platform from UVP6 data files
 import os
 from glob import glob
 import pandas as pd
+import tarfile
+import shutil
 from pathlib import Path
 from .utils._utils import parse_datetime, create_dir
 
@@ -55,6 +57,14 @@ def read_data_files(source_directory, dest_directory, deployment, depth_depl):
     # Create a "results" directory
     create_dir('results')
 
+    # Create folder to store the temporary copy of images.zip
+    create_dir('copy_raw')
+    dir_copy_raw = os.path.join(dest_directory, 'copy_raw')
+
+    # Create a directory for particles data
+    dir_results = os.path.join(dest_directory, 'results')
+    os.chdir(dir_results)
+
     # Create subdirectories in the results directory for each sequence
     os.chdir(dir_raw)
     subdirs = sorted(glob('*'))
@@ -66,12 +76,25 @@ def read_data_files(source_directory, dest_directory, deployment, depth_depl):
 
     for subdir in subdirs:
 
+        # Check if there is a tar file
+        path_tar = os.path.join(dir_raw, subdir)
+
+        if os.path.exists(path_tar):
+            print('tar file found')
+            with tarfile.open(path_tar) as tar:
+                tar.extractall(path=os.path.join(dir_copy_raw, subdir))
+
         # To store a list of dictionaries with file lines
         list_dics = []
 
         # Path to data file
         filename = "".join((subdir, '_data.txt'))
-        path_to_file = os.path.join(dir_raw, subdir, filename)
+        filename = filename.replace('.tar', '')
+        if os.path.exists(path_tar):
+            subdir2 = subdir.replace('.tar', '')
+            path_to_file = os.path.join(dir_copy_raw, subdir, subdir2, filename)
+        else:
+            path_to_file = os.path.join(dir_copy_raw, subdir, filename)
 
         # Read data file
         with open(path_to_file, 'r') as file:
@@ -104,6 +127,12 @@ def read_data_files(source_directory, dest_directory, deployment, depth_depl):
         # df_all = df_all.append(df_seq, ignore_index = True)
         # Instead use the method concat
         df_all = pd.concat([df_all, df_seq])
+
+        if os.path.exists(path_tar):
+            try:
+                shutil.rmtree(os.path.join(dir_copy_raw, subdir))
+            except:
+                continue
 
     # Calculate difference with mean deployment depth
     mean_depth = df_all['averaged_depth'].mean()
@@ -148,7 +177,8 @@ def calc_pltf_speed(source_directory, dest_directory, deployment, depth):
     # Result directory to read trap depth file
     dir_results = os.path.join(dest_directory, 'results')
     filename = os.path.join(
-        dir_results, "".join((deployment, '_', depth, '_trap_depth.csv')))
+        dir_results, "".join(
+            ('platform_depth_', deployment, '_', depth, '.csv')))
 
     # If file doesn't exist, run the function 'read_data_files'
     if Path(filename).is_file():
@@ -218,7 +248,7 @@ def calc_pltf_speed(source_directory, dest_directory, deployment, depth):
 
     filename = os.path.join(
         dir_results, "".join(
-            ('trap_speeds_', deployment, '_', depth, '.csv')))
+            ('platform_speeds_', deployment, '_', depth, '.csv')))
     df_speeds.to_csv(filename, index=False)
 
     return
