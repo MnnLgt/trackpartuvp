@@ -4,6 +4,8 @@ This code is desgined to measure the *in situ* settling velocity of marine
 particles from UVP6 data, whether the UVP6 is mounted on a sediment trap or a
 float.
 
+Please cite the associated paper (in the review process) if you use part of all of this code.
+
 ## Overview
 
 The main goal of this code is to:
