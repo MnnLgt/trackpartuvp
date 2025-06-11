@@ -1,8 +1,6 @@
 # trackpartuvp: Tracking particles from UVP6 images
 
-This code is desgined to measure the *in situ* settling velocity of marine
-particles from UVP6 data, whether the UVP6 is mounted on a sediment trap or a
-float.
+This code is designed to measure the in situ settling velocity of marine particles using UVP6 data, whether the UVP6 is mounted on a sediment trap or a float.
 
 As the associated paper is in the review process, please cite my PhD dissertation ([accessible here](https://theses.hal.science/tel-04552165/)) if you use part or all of this code.
 
